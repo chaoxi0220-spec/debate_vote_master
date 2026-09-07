@@ -203,26 +203,31 @@
   .p3-title{ font-weight:900; font-size:clamp(18px,3vw,24px); letter-spacing:2px; margin-bottom:6px; text-align:center; }
   .p3-sub{ font-size:12px; color:#9aa4c0; margin-bottom:18px; text-align:center; }
 
-  /* ---------- timer panel ---------- */
+  /* ---------- timer panels ---------- */
+  .timer-row{ display:flex; gap:12px; width:100%; max-width:640px; margin-bottom:20px; flex-wrap:wrap; justify-content:center; }
   .timer-panel{
-    background:var(--ink); border:4px solid var(--line); box-shadow:6px 6px 0 rgba(0,0,0,.35);
-    padding:12px 18px 14px; margin-bottom:20px; display:flex; flex-direction:column; align-items:center; gap:8px;
-    width:100%; max-width:300px;
+    flex:1 1 150px; background:var(--ink); border:4px solid var(--line); box-shadow:6px 6px 0 rgba(0,0,0,.35);
+    padding:10px 12px 12px; display:flex; flex-direction:column; align-items:center; gap:7px;
   }
-  .timer-label{ font-weight:900; font-size:12px; letter-spacing:3px; color:#9aa4c0; }
-  .timer-display{ font-weight:900; font-size:clamp(34px,7vw,48px); color:var(--yellow); text-shadow:2px 2px 0 var(--line); font-variant-numeric:tabular-nums; }
-  .timer-display.timeup{ color:var(--blue); animation:timeupFlash 1s ease-in-out infinite; }
+  .timer-label{ font-weight:900; font-size:11px; letter-spacing:2px; color:#9aa4c0; text-align:center; }
+  .timer-panel.zheng .timer-label{ color:#a9bdfd; }
+  .timer-panel.fan .timer-label{ color:#ffe28a; }
+  .timer-display{ font-weight:900; font-size:clamp(26px,6vw,38px); text-shadow:2px 2px 0 var(--line); font-variant-numeric:tabular-nums; color:var(--paper); }
+  .timer-panel.zheng .timer-display{ color:var(--blue); }
+  .timer-panel.fan .timer-display{ color:var(--yellow); }
+  .timer-display.timeup{ animation:timeupFlash 1s ease-in-out infinite; }
   @keyframes timeupFlash{ 0%,100%{opacity:1} 50%{opacity:.35} }
-  .timer-adjust{ display:flex; gap:6px; }
-  .timer-adjust button{ border:3px solid var(--line); background:var(--paper); color:var(--ink); font-weight:900; font-size:12px; padding:6px 10px; box-shadow:3px 3px 0 var(--line); }
+  .timer-adjust{ display:flex; gap:5px; flex-wrap:wrap; justify-content:center; }
+  .timer-adjust button{ border:3px solid var(--line); background:var(--paper); color:var(--ink); font-weight:900; font-size:11px; padding:5px 8px; box-shadow:3px 3px 0 var(--line); }
   .timer-adjust button:disabled{ opacity:.35; }
   .timer-adjust button:not(:disabled):active{ transform:translate(2px,2px); box-shadow:1px 1px 0 var(--line); }
-  .timer-controls{ display:flex; gap:8px; margin-top:2px; }
-  .timer-controls button{ border:4px solid var(--line); font-weight:900; font-size:14px; padding:8px 22px; box-shadow:4px 4px 0 var(--line); }
+  .timer-controls{ display:flex; gap:7px; margin-top:2px; }
+  .timer-controls button{ border:4px solid var(--line); font-weight:900; font-size:12px; padding:7px 16px; box-shadow:4px 4px 0 var(--line); }
   .timer-controls button:active{ transform:translate(3px,3px); box-shadow:1px 1px 0 var(--line); }
-  #timerToggle{ background:var(--yellow); color:var(--ink); }
-  #timerToggle.running{ background:var(--blue); color:var(--paper); }
-  #timerReset{ background:var(--paper); color:var(--ink); }
+  .timer-panel.zheng .timer-toggle-btn{ background:var(--blue); color:var(--paper); }
+  .timer-panel.fan .timer-toggle-btn{ background:var(--yellow); color:var(--ink); }
+  .timer-toggle-btn.running{ background:var(--ink); color:var(--paper); border-color:var(--paper); }
+  .timer-reset-btn{ background:var(--paper); color:var(--ink); }
 
   .score-row{ display:flex; align-items:center; justify-content:center; gap:14px; width:100%; max-width:640px; margin-bottom:20px; }
   .score-box{ flex:1; text-align:center; }
@@ -374,18 +379,34 @@
       <div class="p3-title">现场战况</div>
       <div class="p3-sub" id="totalHint">等待第一票投出…</div>
 
-      <div class="timer-panel">
-        <div class="timer-label">发言时间</div>
-        <div class="timer-display" id="timerDisplay">03:00</div>
-        <div class="timer-adjust">
-          <button type="button" data-d="-30">-30s</button>
-          <button type="button" data-d="-10">-10s</button>
-          <button type="button" data-d="10">+10s</button>
-          <button type="button" data-d="30">+30s</button>
+      <div class="timer-row">
+        <div class="timer-panel zheng" id="tpZheng" data-side="zheng">
+          <div class="timer-label">正方 · 发言时间</div>
+          <div class="timer-display">03:00</div>
+          <div class="timer-adjust">
+            <button type="button" class="timer-adj-btn" data-d="-30">-30s</button>
+            <button type="button" class="timer-adj-btn" data-d="-10">-10s</button>
+            <button type="button" class="timer-adj-btn" data-d="10">+10s</button>
+            <button type="button" class="timer-adj-btn" data-d="30">+30s</button>
+          </div>
+          <div class="timer-controls">
+            <button type="button" class="timer-toggle-btn">开始</button>
+            <button type="button" class="timer-reset-btn">重置</button>
+          </div>
         </div>
-        <div class="timer-controls">
-          <button type="button" id="timerToggle">开始</button>
-          <button type="button" id="timerReset">重置</button>
+        <div class="timer-panel fan" id="tpFan" data-side="fan">
+          <div class="timer-label">反方 · 发言时间</div>
+          <div class="timer-display">03:00</div>
+          <div class="timer-adjust">
+            <button type="button" class="timer-adj-btn" data-d="-30">-30s</button>
+            <button type="button" class="timer-adj-btn" data-d="-10">-10s</button>
+            <button type="button" class="timer-adj-btn" data-d="10">+10s</button>
+            <button type="button" class="timer-adj-btn" data-d="30">+30s</button>
+          </div>
+          <div class="timer-controls">
+            <button type="button" class="timer-toggle-btn">开始</button>
+            <button type="button" class="timer-reset-btn">重置</button>
+          </div>
         </div>
       </div>
 
@@ -503,15 +524,15 @@
   async function setShareUrlStore(url){
     try{ await window.storage.set('shareUrl', url, true); }catch(e){}
   }
-  async function getTimerShared(){
+  async function getTimerShared(side){
     try{
-      const res = await window.storage.get('timer', true);
+      const res = await window.storage.get('timer_'+side, true);
       if(res && res.value) return JSON.parse(res.value);
       return null;
     }catch(e){ return null; }
   }
-  async function setTimerShared(t){
-    try{ await window.storage.set('timer', JSON.stringify(t), true); }catch(e){}
+  async function setTimerShared(side, t){
+    try{ await window.storage.set('timer_'+side, JSON.stringify(t), true); }catch(e){}
   }
 
   function paintSelection(){
@@ -632,78 +653,95 @@
   });
   urlModal.addEventListener('click', (e)=>{ if(e.target===urlModal) closeUrlModal(); });
 
-  // ---------- timer ----------
-  let timerState = {duration:180, remaining:180, endAt:null, running:false};
+  // ---------- timers (正方 / 反方) ----------
+  const SIDES = ['zheng','fan'];
+  let timerStates = {
+    zheng:{duration:180, remaining:180, endAt:null, running:false},
+    fan:{duration:180, remaining:180, endAt:null, running:false}
+  };
   function fmtTime(sec){
     sec = Math.max(0, Math.round(sec));
     const m = Math.floor(sec/60), s = sec%60;
     return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
   }
-  function currentRemaining(){
-    if(timerState.running && timerState.endAt){
-      return Math.max(0, (timerState.endAt - Date.now())/1000);
-    }
-    return timerState.remaining;
+  function currentRemaining(side){
+    const t = timerStates[side];
+    if(t.running && t.endAt) return Math.max(0, (t.endAt - Date.now())/1000);
+    return t.remaining;
   }
-  function paintTimer(){
-    const disp = document.getElementById('timerDisplay');
-    const rem = currentRemaining();
+  function timerPanelEl(side){ return document.getElementById(side==='zheng' ? 'tpZheng' : 'tpFan'); }
+  function paintTimer(side){
+    const panel = timerPanelEl(side);
+    const t = timerStates[side];
+    const rem = currentRemaining(side);
+    const disp = panel.querySelector('.timer-display');
     disp.textContent = fmtTime(rem);
-    disp.classList.toggle('timeup', rem<=0 && !timerState.running);
-    const toggle = document.getElementById('timerToggle');
-    toggle.textContent = timerState.running ? '暂停' : (rem<=0 ? '重新开始' : '开始');
-    toggle.classList.toggle('running', timerState.running);
-    document.querySelectorAll('.timer-adjust button').forEach(b=> b.disabled = timerState.running);
+    disp.classList.toggle('timeup', rem<=0 && !t.running);
+    const toggle = panel.querySelector('.timer-toggle-btn');
+    toggle.textContent = t.running ? '暂停' : (rem<=0 ? '重新开始' : '开始');
+    toggle.classList.toggle('running', t.running);
+    panel.querySelectorAll('.timer-adj-btn').forEach(b=> b.disabled = t.running);
   }
-  async function timerAdjust(delta){
-    if(timerState.running) return;
-    timerState.remaining = Math.max(0, Math.min(3599, timerState.remaining + delta));
-    timerState.duration = timerState.remaining;
-    timerState.endAt = null;
-    await setTimerShared(timerState);
-    paintTimer();
+  async function timerAdjust(side, delta){
+    const t = timerStates[side];
+    if(t.running) return;
+    t.remaining = Math.max(0, Math.min(3599, t.remaining + delta));
+    t.duration = t.remaining;
+    t.endAt = null;
+    await setTimerShared(side, t);
+    paintTimer(side);
   }
-  async function timerToggleFn(){
-    if(timerState.running){
-      timerState.remaining = currentRemaining();
-      timerState.running = false;
-      timerState.endAt = null;
+  async function timerToggleFn(side){
+    const t = timerStates[side];
+    if(t.running){
+      t.remaining = currentRemaining(side);
+      t.running = false;
+      t.endAt = null;
     } else {
-      if(currentRemaining() <= 0) timerState.remaining = timerState.duration;
-      timerState.endAt = Date.now() + timerState.remaining*1000;
-      timerState.running = true;
+      if(currentRemaining(side) <= 0) t.remaining = t.duration;
+      t.endAt = Date.now() + t.remaining*1000;
+      t.running = true;
     }
-    await setTimerShared(timerState);
-    paintTimer();
+    await setTimerShared(side, t);
+    paintTimer(side);
   }
-  async function timerResetFn(){
-    timerState.remaining = timerState.duration;
-    timerState.running = false;
-    timerState.endAt = null;
-    await setTimerShared(timerState);
-    paintTimer();
+  async function timerResetFn(side){
+    const t = timerStates[side];
+    t.remaining = t.duration;
+    t.running = false;
+    t.endAt = null;
+    await setTimerShared(side, t);
+    paintTimer(side);
   }
-  document.querySelectorAll('.timer-adjust button').forEach(b=>{
-    b.addEventListener('click', ()=> timerAdjust(parseInt(b.dataset.d,10)));
+  document.querySelectorAll('.timer-panel').forEach(panel=>{
+    const side = panel.dataset.side;
+    panel.querySelectorAll('.timer-adj-btn').forEach(b=>{
+      b.addEventListener('click', ()=> timerAdjust(side, parseInt(b.dataset.d,10)));
+    });
+    panel.querySelector('.timer-toggle-btn').addEventListener('click', ()=> timerToggleFn(side));
+    panel.querySelector('.timer-reset-btn').addEventListener('click', ()=> timerResetFn(side));
   });
-  document.getElementById('timerToggle').addEventListener('click', timerToggleFn);
-  document.getElementById('timerReset').addEventListener('click', timerResetFn);
 
   function tickTimer(){
-    if(timerState.running){
-      const rem = currentRemaining();
-      if(rem<=0){
-        timerState.running=false; timerState.remaining=0; timerState.endAt=null;
-        setTimerShared(timerState);
+    SIDES.forEach(side=>{
+      const t = timerStates[side];
+      if(t.running){
+        const rem = currentRemaining(side);
+        if(rem<=0){
+          t.running=false; t.remaining=0; t.endAt=null;
+          setTimerShared(side, t);
+        }
+        paintTimer(side);
       }
-      paintTimer();
-    }
+    });
   }
   async function refreshTimerFromShared(){
-    const t = await getTimerShared();
-    if(t){ timerState = t; }
-    else { await setTimerShared(timerState); }
-    paintTimer();
+    for(const side of SIDES){
+      const t = await getTimerShared(side);
+      if(t){ timerStates[side] = t; }
+      else { await setTimerShared(side, timerStates[side]); }
+      paintTimer(side);
+    }
   }
 
   async function init(){
